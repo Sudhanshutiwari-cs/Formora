@@ -1,0 +1,29 @@
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl      = env("DIRECT_URL")
+}
+//FORM MODEL
+model Form{
+  id Int @id @default(autoincrement())
+  ownerId String
+  createdAt DateTime @default(now())
+  published Boolean @default(false)
+  content Json
+  Submission Int @default(0)
+  shareUrl String @default(uuid())
+  FormSubmission Submission[]
+}
+//SUBMISSION MODEL WITH RELATION TO FORM
+model Submission{
+ id Int @id @default(autoincrement())
+ createdAt DateTime @default(now())
+  formId Int
+  form Form @relation(fields: [formId], references: [id])
+}
